@@ -23,7 +23,6 @@ using Volvox.Helios.Core.Modules.DiscordFacing;
 using Volvox.Helios.Core.Modules.DiscordFacing.Commands;
 using Volvox.Helios.Core.Modules.DiscordFacing.Framework;
 using Volvox.Helios.Core.Modules.LookingForGroup;
-using Volvox.Helios.Core.Modules.LookingForGroup.Commands;
 using Volvox.Helios.Core.Modules.StreamAnnouncer;
 using Volvox.Helios.Core.Modules.StreamerRole;
 using Volvox.Helios.Core.Utilities;
@@ -117,7 +116,6 @@ namespace Volvox.Helios.Web
             // DiscordFacing
             services.AddSingleton<IModule, DiscordFacingManager>();
             services.AddSingleton<ICommand, ExampleCommand>();
-            services.AddSingleton<ICommand, TestCommand>();
 
             // All Modules
             services.AddSingleton<IList<IModule>>(s => s.GetServices<IModule>().ToList());
