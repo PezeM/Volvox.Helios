@@ -20,6 +20,13 @@
       "Description": "If you're seeing this, run before the rest of the site explodes",
       "ReleaseState": "Stable",
       "Configurable": "false"
+    },
+    "LookingForGroupModule": {
+      "Name": "Looking For Group",
+      "Version": "1.0",
+      "Description": "Looks for groups and such.",
+      "ReleaseState": "Canary",
+      "Configurable": true
     }
   }
 }

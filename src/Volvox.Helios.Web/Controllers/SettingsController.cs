@@ -26,11 +26,15 @@ namespace Volvox.Helios.Web.Controllers
     {
         private readonly IModuleSettingsService<StreamAnnouncerSettings> _streamAnnouncerSettingsService;
         private readonly IModuleSettingsService<StreamerRoleSettings> _streamerRoleSettingsService;
+        private readonly IModuleSettingsService<LookingForGroupSettings> _lookingForGroupSettingsService;
 
-        public SettingsController(IModuleSettingsService<StreamAnnouncerSettings> streamAnnouncerSettingsService, IModuleSettingsService<StreamerRoleSettings> streamerRoleSettingsService)
+        public SettingsController(IModuleSettingsService<StreamAnnouncerSettings> streamAnnouncerSettingsService,
+            IModuleSettingsService<StreamerRoleSettings> streamerRoleSettingsService,
+            IModuleSettingsService<LookingForGroupSettings> lookingForGroupSettingService)
         {
             _streamAnnouncerSettingsService = streamAnnouncerSettingsService;
             _streamerRoleSettingsService = streamerRoleSettingsService;
+            _lookingForGroupSettingsService = lookingForGroupSettingService;
         }
 
         public IActionResult Index(ulong guildId, [FromServices] IBot bot,
@@ -153,6 +157,31 @@ namespace Volvox.Helios.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        #endregion
+
+        #region LookingForGroup
+        [HttpGet("LookingForGroup")]
+        public async Task<IActionResult> LookingForGroupSettings(ulong guildId)
+        {
+            var settings = await _lookingForGroupSettingsService.GetSettingsByGuild(guildId);
+            var vm = new LookingForGroupSettingsViewModel
+            {
+                Enabled = settings?.Enabled ?? false
+            };
+            return View(vm);
+        }
+
+        [HttpPost("LookingForGroup")]
+        public async Task<IActionResult> LookingForGroupSettings(ulong guildId, LookingForGroupSettingsViewModel vm)
+        {
+            await _lookingForGroupSettingsService.SaveSettings(new LookingForGroupSettings
+            {
+                Enabled = vm.Enabled,
+                GuildId = guildId
+            });
+
+            return RedirectToAction("Index");
+        }
         #endregion
     }
 }

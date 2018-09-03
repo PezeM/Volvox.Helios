@@ -1,0 +1,35 @@
+﻿@model Volvox.Helios.Web.ViewModels.Settings.LookingForGroupSettingsViewModel
+
+@{
+    ViewData["Title"] = "Looking For Group Settings";
+}
+
+<h2>LookingForGroupSettings</h2>
+
+<h4>LookingForGroupSettingsViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="LookingForGroupSettings">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="Enabled" /> @Html.DisplayNameFor(model => model.Enabled)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
