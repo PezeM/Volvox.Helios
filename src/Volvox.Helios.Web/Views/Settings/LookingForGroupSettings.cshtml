@@ -19,6 +19,25 @@
                     </label>
                 </div>
             </div>
+            <h2>LFG Sessions</h2>
+            <a asp-controller="Settings" asp-action="LookingForGroupEditSession" class="btn btn-primary">Add</a>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Action</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var session in Model.Sessions)
+                    {
+                        <tr>
+                            <td>@session.Title</td>
+                            <td> <button>Edit</button> </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>

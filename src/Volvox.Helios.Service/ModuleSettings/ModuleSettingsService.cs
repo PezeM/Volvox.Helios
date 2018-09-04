@@ -19,7 +19,7 @@ namespace Volvox.Helios.Service.ModuleSettings
         }
 
         /// <inheritdoc />
-        public async Task SaveSettings(T settings)
+        public virtual async Task SaveSettings(T settings)
         {
             // Create a new scope to get the db context.
             using (var scope = _scopeFactory.CreateScope())
@@ -43,7 +43,7 @@ namespace Volvox.Helios.Service.ModuleSettings
         }
 
         /// <inheritdoc />
-        public async Task<T> GetSettingsByGuild(ulong guildId)
+        public virtual async Task<T> GetSettingsByGuild(ulong guildId)
         {
             // Create a new scope to get the db context.
             using (var scope = _scopeFactory.CreateScope())
@@ -62,7 +62,7 @@ namespace Volvox.Helios.Service.ModuleSettings
         }
 
         /// <inheritdoc />
-        public async Task RemoveSetting(T settings)
+        public virtual async Task RemoveSetting(T settings)
         {
             // Create a new scope to get the db context.
             using (var scope = _scopeFactory.CreateScope())

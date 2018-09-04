@@ -166,8 +166,23 @@ namespace Volvox.Helios.Web.Controllers
             var settings = await _lookingForGroupSettingsService.GetSettingsByGuild(guildId);
             var vm = new LookingForGroupSettingsViewModel
             {
-                Enabled = settings?.Enabled ?? false
+                Enabled = settings?.Enabled ?? false,
             };
+
+            if (settings.Sessions is null)
+            {
+                vm.Sessions = new List<LookingForGroupSessionViewModel>();
+            }
+            else
+            {
+                vm.Sessions = settings.Sessions.Select(s => new LookingForGroupSessionViewModel
+                {
+                    Id = s.Id,
+                    Description = s.Description,
+                    Title = s.Title
+                }).ToList();
+            }
+
             return View(vm);
         }
 
@@ -181,6 +196,56 @@ namespace Volvox.Helios.Web.Controllers
             });
 
             return RedirectToAction("Index");
+        }
+
+        [HttpGet("LookingForGroup/Sessions/Add")]
+        public async Task<IActionResult> LookingForGroupEditSession(ulong guildId, [FromQuery]Guid? sessionId)
+        {
+            if(sessionId.HasValue)
+            {
+                var settings = await _lookingForGroupSettingsService.GetSettingsByGuild(guildId);
+                var session = settings.Sessions.FirstOrDefault(x => x.Id == sessionId);
+
+                var vm = new LookingForGroupAddSessionViewModel
+                {
+                    Description = session.Description,
+                    HasMaximumCapacity = session.HasMaximumCapacity,
+                    MaximumMembers = session.MaximumMembers,
+                    RestrictedRoles = session.RoleRestrictions.Select(r => new LookingForGroupRoleViewModel
+                    {
+                        Id = r.Id,
+                        Title = ""
+                    }).ToList(),
+                    RestrictRoles = session.HasRoleRestrictions,
+                    ShortId = session.ShortIdentifyer,
+                    Title = session.Title
+                };
+
+                return View(vm);
+            }
+            else
+            {
+                return View(new LookingForGroupAddSessionViewModel());
+            }
+        }
+
+        [HttpPost("LookingForGroup/Sessions/Add")]
+        public async Task<IActionResult> LookingForGroupEditSession(ulong guildId, LookingForGroupAddSessionViewModel vm)
+        {
+            var settings = await _lookingForGroupSettingsService.GetSettingsByGuild(guildId);
+            settings.Sessions.Add(new LookingForGroupSession
+            {
+                Description = vm.Description,
+                GuildId = guildId,
+                HasMaximumCapacity = vm.HasMaximumCapacity,
+                MaximumMembers = vm.MaximumMembers,
+                ShortIdentifyer = vm.ShortId,
+                Title = vm.Title
+            });
+
+            await _lookingForGroupSettingsService.SaveSettings(settings);
+
+            return RedirectToAction("LookingForGroupSettings");
         }
         #endregion
     }

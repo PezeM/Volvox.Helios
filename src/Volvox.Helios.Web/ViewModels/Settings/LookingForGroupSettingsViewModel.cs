@@ -13,5 +13,7 @@ namespace Volvox.Helios.Web.ViewModels.Settings
         [DisplayName("Enabled")]
         [DefaultValue(true)]
         public bool Enabled { get; set; }
+
+        public List<LookingForGroupSessionViewModel> Sessions { get; set; }
     }
 }

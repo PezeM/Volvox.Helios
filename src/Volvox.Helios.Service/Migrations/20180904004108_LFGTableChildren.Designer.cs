@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volvox.Helios.Service;
 
 namespace Volvox.Helios.Service.Migrations
 {
     [DbContext(typeof(VolvoxHeliosContext))]
-    partial class VolvoxHeliosContextModelSnapshot : ModelSnapshot
+    [Migration("20180904004108_LFGTableChildren")]
+    partial class LFGTableChildren
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,7 +38,7 @@ namespace Volvox.Helios.Service.Migrations
 
                     b.HasIndex("LookingForGroupSessionId");
 
-                    b.ToTable("LookingForGroupPlayerRole","lfg");
+                    b.ToTable("LookingForGroupPlayerRole");
                 });
 
             modelBuilder.Entity("Volvox.Helios.Domain.ModuleSettings.LookingForGroupPlayerRoleMap", b =>
@@ -53,7 +55,7 @@ namespace Volvox.Helios.Service.Migrations
 
                     b.HasIndex("SessionId");
 
-                    b.ToTable("LookingForGroupPlayerRoleMap","lfg");
+                    b.ToTable("LookingForGroupPlayerRoleMap");
                 });
 
             modelBuilder.Entity("Volvox.Helios.Domain.ModuleSettings.LookingForGroupRoleRestriction", b =>
@@ -78,7 +80,7 @@ namespace Volvox.Helios.Service.Migrations
 
                     b.HasIndex("SessionId");
 
-                    b.ToTable("LookingForGroupRoleRestriction","lfg");
+                    b.ToTable("LookingForGroupRoleRestriction");
                 });
 
             modelBuilder.Entity("Volvox.Helios.Domain.ModuleSettings.LookingForGroupSession", b =>
@@ -104,10 +106,10 @@ namespace Volvox.Helios.Service.Migrations
 
                     b.HasIndex("GuildId");
 
-                    b.ToTable("LookingForGroupSessions","lfg");
+                    b.ToTable("LookingForGroupSession");
 
                     b.HasData(
-                        new { Id = new Guid("62aa88a8-b7e1-4b9d-8802-5bdec352660c"), Description = "Test LFG for things and whatnot", GuildId = 486220073933996043m, HasMaximumCapacity = true, MaximumMembers = 24, ShortIdentifyer = "TLG", Title = "Test LFG" }
+                        new { Id = new Guid("6bac483a-4216-4911-8529-193605476008"), Description = "Test LFG for things and whatnot", GuildId = 486220073933996043m, HasMaximumCapacity = true, MaximumMembers = 24, ShortIdentifyer = "TLG", Title = "Test LFG" }
                     );
                 });
 
@@ -121,7 +123,7 @@ namespace Volvox.Helios.Service.Migrations
 
                     b.HasKey("GuildId");
 
-                    b.ToTable("LookingForGroupSettings","lfg");
+                    b.ToTable("LookingForGroupSettings");
                 });
 
             modelBuilder.Entity("Volvox.Helios.Domain.ModuleSettings.StreamAnnouncerSettings", b =>

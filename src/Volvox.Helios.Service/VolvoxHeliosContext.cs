@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volvox.Helios.Domain.ModuleSettings;
+using Volvox.Helios.Service.Extensions;
 
 namespace Volvox.Helios.Service
 {
@@ -14,5 +15,12 @@ namespace Volvox.Helios.Service
         public DbSet<StreamerRoleSettings> StreamerRoleSettings { get; set; }
 
         public DbSet<LookingForGroupSettings> LookingForGroupSettings { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.BuildLookingForGroupEntities();
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
