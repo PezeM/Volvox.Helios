@@ -2,10 +2,8 @@
 
 namespace Volvox.Helios.Service.DelayedProcessing
 {
-    public interface IDelayedService<in TDelayedItem>
+    public interface IDelayedServiceProcessor<in TDelayedItem>
     {
-        void Push(TDelayedItem delayedItem);
-
         /// <summary>
         ///     Processes all added actions.
         /// </summary>

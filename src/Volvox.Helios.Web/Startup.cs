@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Cronos;
 using FluentCache;
 using FluentCache.Microsoft.Extensions.Caching.Memory;
 using Hangfire;
@@ -29,6 +30,7 @@ using Volvox.Helios.Core.Modules.StreamerRole;
 using Volvox.Helios.Core.Utilities;
 using Volvox.Helios.Service;
 using Volvox.Helios.Service.Clients;
+using Volvox.Helios.Service.DelayedProcessing;
 using Volvox.Helios.Service.Discord.Guild;
 using Volvox.Helios.Service.Discord.User;
 using Volvox.Helios.Service.ModuleSettings;
@@ -121,9 +123,15 @@ namespace Volvox.Helios.Web
             services.AddSingleton<IModule, DiscordFacingManager>();
             services.AddSingleton<ICommand, ExampleCommand>();
 
+            // Delaying Service
+            services.AddScoped<IRepository<Action<VolvoxHeliosContext>>, VolvoxHeliosActionRepository>();
+            services.AddScoped<IDelayedServiceProcessor<Action<VolvoxHeliosContext>>, VolvoxHeliosActionRepositoryProcessor>();
+            
+
             // All Modules
             services.AddSingleton<IList<IModule>>(s => s.GetServices<IModule>().ToList());
             services.AddSingleton<IList<ICommand>>(s => s.GetServices<ICommand>().ToList());
+
 
             // HTTP Clients
             services.AddHttpClient<DiscordAPIClient>(options =>
@@ -154,6 +162,7 @@ namespace Volvox.Helios.Web
             // Entity Framework
             services.AddDbContext<VolvoxHeliosContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("VolvoxHeliosDatabase")));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
