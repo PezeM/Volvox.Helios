@@ -5,6 +5,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using FluentCache;
 using FluentCache.Microsoft.Extensions.Caching.Memory;
+using Hangfire;
+using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
@@ -48,6 +50,10 @@ namespace Volvox.Helios.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHangfire(config => config.UseMemoryStorage());
+
+            services.AddMvc();
+
             // GDPR Cookie Consent
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -157,6 +163,21 @@ namespace Volvox.Helios.Web
             {
                 app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
+
+
+                // Hangfire
+                loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+                loggerFactory.AddDebug();
+
+                app.UseHangfireDashboard();
+                app.UseHangfireServer();
+
+                app.UseMvc(routes =>
+                {
+                    routes.MapRoute(
+                        "default",
+                        "{controller=Home}/{action=Index}/{id?}");
+                });
             }
             else
             {
