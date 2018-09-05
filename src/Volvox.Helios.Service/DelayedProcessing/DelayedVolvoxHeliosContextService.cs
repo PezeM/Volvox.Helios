@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Volvox.Helios.Service;
 
-namespace Volvox.Helios.Core.Bot
+namespace Volvox.Helios.Service.DelayedProcessing
 {
     public class DelayedContextService : IDelayedService<Action<VolvoxHeliosContext>>
     {

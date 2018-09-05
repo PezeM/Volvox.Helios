@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volvox.Helios.Core.Bot
+namespace Volvox.Helios.Service.DelayedProcessing
 {
     public interface IDelayedService<in TDelayedItem>
     {
