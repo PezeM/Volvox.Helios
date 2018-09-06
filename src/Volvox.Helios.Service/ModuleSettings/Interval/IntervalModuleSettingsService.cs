@@ -1,4 +1,5 @@
-﻿using Hangfire;
+﻿using System;
+using Hangfire;
 using Volvox.Helios.Service.DelayedProcessing;
 
 namespace Volvox.Helios.Service.ModuleSettings.Interval
@@ -25,12 +26,14 @@ namespace Volvox.Helios.Service.ModuleSettings.Interval
         }
 
         /// <summary>
-        /// Save the changes to the database after the delay.
+        /// Save the added settings to the database after the specified delay.
         /// </summary>
-        /// <param name="delay">Amount of time to wait.</param>
-        public void StartSaveInterval(string delay = "*/5 * * * *")
+        /// <param name="delay">Amount of time to wait before saving to the database.</param>
+        public void StartSaveInterval(TimeSpan delay)
         {
-            RecurringJob.AddOrUpdate(() => _volvoxHeliosActionRepositoryProcessor.ProcessAsync(), delay);
+            var jobId = BackgroundJob.Schedule(
+                () => _volvoxHeliosActionRepositoryProcessor.ProcessAsync(),
+                TimeSpan.FromSeconds(5));
         }
     }
 }

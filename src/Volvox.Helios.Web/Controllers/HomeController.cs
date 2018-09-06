@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Volvox.Helios.Core.Modules.StreamAnnouncer;
 using Volvox.Helios.Domain.ModuleSettings;
 using Volvox.Helios.Service.ModuleSettings.Interval;
@@ -26,7 +27,7 @@ namespace Volvox.Helios.Web.Controllers
                 });
             }
 
-            _settingsService.StartSaveInterval();
+            _settingsService.StartSaveInterval(TimeSpan.FromMinutes(5));
 
             return View();
         }
