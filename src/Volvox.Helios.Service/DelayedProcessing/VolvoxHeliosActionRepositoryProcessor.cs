@@ -3,25 +3,25 @@ using System.Threading.Tasks;
 
 namespace Volvox.Helios.Service.DelayedProcessing
 {
-    public class VolvoxHeliosActionRepositoryProcessor : IDelayedServiceProcessor<Action<VolvoxHeliosContext>>
+    public class VolvoxHeliosActionRepositoryProcessor : IDelayedServiceProcessor
     {
-        private readonly VolvoxHeliosContext volvoxHeliosContext;
-        private readonly IRepository<Action<VolvoxHeliosContext>> repository;
+        private readonly VolvoxHeliosContext _volvoxHeliosContext;
+        private readonly IRepository<Action<VolvoxHeliosContext>> _repository;
 
         public VolvoxHeliosActionRepositoryProcessor(VolvoxHeliosContext volvoxHeliosContext, IRepository<Action<VolvoxHeliosContext>> repository)
         {
-            this.volvoxHeliosContext = volvoxHeliosContext;
-            this.repository = repository;
+            _volvoxHeliosContext = volvoxHeliosContext;
+            _repository = repository;
         }
 
         public async Task ProcessAsync()
         {
-            foreach (var action in repository.Get())
+            foreach (var action in _repository.Get())
             {
-                action.Invoke(volvoxHeliosContext);
+                action.Invoke(_volvoxHeliosContext);
             }
 
-            await volvoxHeliosContext.SaveChangesAsync();
+            await _volvoxHeliosContext.SaveChangesAsync();
         }
     }
 }

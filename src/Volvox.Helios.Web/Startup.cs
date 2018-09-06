@@ -34,6 +34,7 @@ using Volvox.Helios.Service.DelayedProcessing;
 using Volvox.Helios.Service.Discord.Guild;
 using Volvox.Helios.Service.Discord.User;
 using Volvox.Helios.Service.ModuleSettings;
+using Volvox.Helios.Service.ModuleSettings.Interval;
 using Volvox.Helios.Web.Filters;
 using Volvox.Helios.Web.HostedServices.Bot;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
@@ -125,8 +126,10 @@ namespace Volvox.Helios.Web
 
             // Delaying Service
             services.AddScoped<IRepository<Action<VolvoxHeliosContext>>, VolvoxHeliosActionRepository>();
-            services.AddScoped<IDelayedServiceProcessor<Action<VolvoxHeliosContext>>, VolvoxHeliosActionRepositoryProcessor>();
-            
+            services.AddScoped<IDelayedServiceProcessor, VolvoxHeliosActionRepositoryProcessor>();
+
+            // Interval Service
+            services.AddSingleton(typeof(IIntervalModuleSettingsService<>), typeof(IntervalModuleSettingsService<>));
 
             // All Modules
             services.AddSingleton<IList<IModule>>(s => s.GetServices<IModule>().ToList());
@@ -172,21 +175,6 @@ namespace Volvox.Helios.Web
             {
                 app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
-
-
-                // Hangfire
-                loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-                loggerFactory.AddDebug();
-
-                app.UseHangfireDashboard();
-                app.UseHangfireServer();
-
-                app.UseMvc(routes =>
-                {
-                    routes.MapRoute(
-                        "default",
-                        "{controller=Home}/{action=Index}/{id?}");
-                });
             }
             else
             {
