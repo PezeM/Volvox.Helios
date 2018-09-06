@@ -1,27 +1,58 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Volvox.Helios.Service.DelayedProcessing
 {
-    public class VolvoxHeliosActionRepositoryProcessor : IDelayedServiceProcessor
+    public class VolvoxHeliosActionRepositoryProcessor : IDelayedServiceProcessor, IRepository<Action<VolvoxHeliosContext>>, IVolvoxHeliosActionRepositoryProcessor
     {
-        private readonly VolvoxHeliosContext _volvoxHeliosContext;
-        private readonly IRepository<Action<VolvoxHeliosContext>> _repository;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-        public VolvoxHeliosActionRepositoryProcessor(VolvoxHeliosContext volvoxHeliosContext, IRepository<Action<VolvoxHeliosContext>> repository)
+        public VolvoxHeliosActionRepositoryProcessor(IServiceScopeFactory scopeFactory)
         {
-            _volvoxHeliosContext = volvoxHeliosContext;
-            _repository = repository;
+            _scopeFactory = scopeFactory;
+        }
+
+        public static IList<Action<VolvoxHeliosContext>> Actions = new List<Action<VolvoxHeliosContext>>();
+
+        /// <summary>
+        ///     Returns an immutable clone of all added items. Afterwards clears all items added to the repository.
+        /// </summary>
+        /// <returns></returns>
+        public IList<Action<VolvoxHeliosContext>> Get()
+        {
+            var readOnlyCollection =
+                new ReadOnlyCollection<Action<VolvoxHeliosContext>>(new List<Action<VolvoxHeliosContext>>(Actions));
+
+            Actions.Clear();
+
+            return readOnlyCollection;
+        }
+
+        /// <summary>
+        ///     Adds an action to the list.
+        /// </summary>
+        /// <param name="delayedItem">Action to add.</param>
+        public void Push(Action<VolvoxHeliosContext> delayedItem)
+        {
+            Actions.Add(delayedItem);
         }
 
         public async Task ProcessAsync()
         {
-            foreach (var action in _repository.Get())
+            using (var scope = _scopeFactory.CreateScope())
             {
-                action.Invoke(_volvoxHeliosContext);
-            }
+                var volvoxHeliosContext = scope.ServiceProvider.GetRequiredService<VolvoxHeliosContext>();
 
-            await _volvoxHeliosContext.SaveChangesAsync();
+                foreach (var action in Get())
+                {
+                    action.Invoke(volvoxHeliosContext);
+                }
+
+                await volvoxHeliosContext.SaveChangesAsync();
+            }
         }
     }
 }

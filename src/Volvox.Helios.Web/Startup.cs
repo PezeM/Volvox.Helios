@@ -125,8 +125,8 @@ namespace Volvox.Helios.Web
             services.AddSingleton<ICommand, ExampleCommand>();
 
             // Delaying Service
-            services.AddScoped<IRepository<Action<VolvoxHeliosContext>>, VolvoxHeliosActionRepository>();
-            services.AddScoped<IDelayedServiceProcessor, VolvoxHeliosActionRepositoryProcessor>();
+            services.AddSingleton<IVolvoxHeliosActionRepository, VolvoxHeliosActionRepository>();
+            services.AddSingleton<IVolvoxHeliosActionRepositoryProcessor, VolvoxHeliosActionRepositoryProcessor>();
 
             // Interval Service
             services.AddSingleton(typeof(IIntervalModuleSettingsService<>), typeof(IntervalModuleSettingsService<>));
@@ -175,6 +175,10 @@ namespace Volvox.Helios.Web
             {
                 app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
+
+                // Hangfire
+                app.UseHangfireDashboard();
+                app.UseHangfireServer();
             }
             else
             {

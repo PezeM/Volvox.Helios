@@ -8,13 +8,11 @@ namespace Volvox.Helios.Service.ModuleSettings.Interval
     /// </summary>
     public class IntervalModuleSettingsService<T> : IIntervalModuleSettingsService<T> where T : Domain.ModuleSettings.ModuleSettings
     {
-        private readonly VolvoxHeliosActionRepositoryProcessor _volvoxHeliosActionRepositoryProcessor;
-        private readonly VolvoxHeliosActionRepository _volvoxHeliosActionRepository;
+        private readonly IVolvoxHeliosActionRepositoryProcessor _volvoxHeliosActionRepositoryProcessor;
 
-        public IntervalModuleSettingsService(VolvoxHeliosActionRepositoryProcessor volvoxHeliosActionRepositoryProcessor, VolvoxHeliosActionRepository volvoxHeliosActionRepository)
+        public IntervalModuleSettingsService(IVolvoxHeliosActionRepositoryProcessor volvoxHeliosActionRepositoryProcessor)
         {
             _volvoxHeliosActionRepositoryProcessor = volvoxHeliosActionRepositoryProcessor;
-            _volvoxHeliosActionRepository = volvoxHeliosActionRepository;
         }
 
         /// <summary>
@@ -23,7 +21,7 @@ namespace Volvox.Helios.Service.ModuleSettings.Interval
         /// <param name="setting"></param>
         public void AddSetting(T setting)
         {
-            _volvoxHeliosActionRepository.Push(async c => await c.AddAsync(setting));
+            _volvoxHeliosActionRepositoryProcessor.Push(async c => await c.AddAsync(setting));
         }
 
         /// <summary>

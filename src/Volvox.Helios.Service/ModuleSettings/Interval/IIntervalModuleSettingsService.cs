@@ -15,6 +15,6 @@
         /// Save the changes to the database after the delay.
         /// </summary>
         /// <param name="delay">Amount of time to wait.</param>
-        void StartSaveInterval(string delay);
+        void StartSaveInterval(string delay = "*/5 * * * *");
     }
 }

@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace Volvox.Helios.Service.DelayedProcessing
 {
-    public class VolvoxHeliosActionRepository : IRepository<Action<VolvoxHeliosContext>>
+    public class VolvoxHeliosActionRepository : IRepository<Action<VolvoxHeliosContext>>, IVolvoxHeliosActionRepository
     {
         private readonly IList<Action<VolvoxHeliosContext>> _actions = new List<Action<VolvoxHeliosContext>>();
 
