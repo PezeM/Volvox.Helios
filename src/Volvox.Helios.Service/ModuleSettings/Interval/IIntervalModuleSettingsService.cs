@@ -1,22 +1,20 @@
-﻿using System;
-
-namespace Volvox.Helios.Service.ModuleSettings.Interval
+﻿namespace Volvox.Helios.Service.ModuleSettings.Interval
 {
     /// <summary>
-    /// Save settings to the database in a delayed interval.
+    ///     Save settings to the database in a delayed interval.
     /// </summary>
     public interface IIntervalModuleSettingsService<T> where T : Domain.ModuleSettings.ModuleSettings
     {
         /// <summary>
-        /// Add a setting to be added.
+        ///     Add a setting to be added after the saving interval.
         /// </summary>
-        /// <param name="setting"></param>
+        /// <param name="setting">Setting to be added.</param>
         void AddSetting(T setting);
 
         /// <summary>
-        /// Save the changes to the database after the delay.
+        ///     Save the added settings to the database on a recurring job.
         /// </summary>
-        /// <param name="delay">Amount of time to wait.</param>
-        void StartSaveInterval(TimeSpan delay );
+        /// <param name="delay">Amount of time to wait before saving to the database. If not set will default to minutely.</param>
+        void StartSaveInterval(string delay = "");
     }
 }

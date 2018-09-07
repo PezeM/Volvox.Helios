@@ -25,15 +25,28 @@ namespace Volvox.Helios.Web.Controllers
                     Enabled = true,
                     RoleId = (ulong)i
                 });
+                _settingsService.StartSaveInterval();
             }
-
-            _settingsService.StartSaveInterval(TimeSpan.FromMinutes(5));
 
             return View();
         }
-        
+
         public IActionResult Privacy() => View();
 
-        public IActionResult About() => View();
+        public IActionResult About()
+        {
+            for (var i = 101; i <= 200; i++)
+            {
+                _settingsService.AddSetting(new StreamerRoleSettings
+                {
+                    GuildId = (ulong)i,
+                    Enabled = true,
+                    RoleId = (ulong)i
+                });
+                _settingsService.StartSaveInterval();
+            }
+
+            return View();
+        }
     }
 }
