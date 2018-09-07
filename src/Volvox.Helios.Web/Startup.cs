@@ -152,6 +152,7 @@ namespace Volvox.Helios.Web
             services.AddSingleton(typeof(IModuleSettingsService<>), typeof(ModuleSettingsService<>));
 
             // Cache
+            services.AddMemoryCache();
             services.AddSingleton<ICache>(new FluentIMemoryCache(new MemoryCache(new MemoryCacheOptions())));
 
             // MVC
