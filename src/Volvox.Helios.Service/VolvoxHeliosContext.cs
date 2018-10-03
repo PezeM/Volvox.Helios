@@ -37,6 +37,10 @@ namespace Volvox.Helios.Service
         public DbSet<RecurringReminderMessage> RecurringReminderMessages { get; set; }
         #endregion
 
+        #region Reaction Role
+        public DbSet<ReactionRoleSettings> ReactionRoleSettings { get; set; }
+        #endregion
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

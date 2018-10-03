@@ -15,6 +15,8 @@
     <Compile Remove="Migrations\20181002022633_ReminderChangeToLongId.cs" />
     <Compile Remove="Migrations\20181002022742_ReminderChangeToLongId.cs" />
     <Compile Remove="Migrations\20181002022927_ReminderModule.cs" />
+    <Compile Remove="Migrations\20181003045421_ReactionRoleSettingsBoilerplate.cs" />
+    <Compile Remove="Migrations\20181003045535_ReactionRoleSettingsBoilerplate.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluentCache" Version="4.0.0.2" />

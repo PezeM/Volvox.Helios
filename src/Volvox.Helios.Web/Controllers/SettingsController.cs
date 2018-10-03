@@ -30,13 +30,15 @@ namespace Volvox.Helios.Web.Controllers
         private readonly IModuleSettingsService<StreamerRoleSettings> _streamerRoleSettingsService;
         private readonly IModuleSettingsService<RemembotSettings> _reminderSettingsService;
         private readonly IEntityService<RecurringReminderMessage> _recurringReminderService;
+        private readonly IModuleSettingsService<ReactionRoleSettings> _reactionRoleSettingsService;
 
         public SettingsController(IModuleSettingsService<StreamAnnouncerSettings> streamAnnouncerSettingsService,
             IModuleSettingsService<StreamerRoleSettings> streamerRoleSettingsService,
             IEntityService<StreamAnnouncerChannelSettings> streamAnnouncerChannelSettingsService,
             IModuleSettingsService<ChatTrackerSettings> chatTrackerSettingsService,
             IModuleSettingsService<RemembotSettings> reminderSettingsService,
-            IEntityService<RecurringReminderMessage> recurringReminderService)
+            IEntityService<RecurringReminderMessage> recurringReminderService,
+            IModuleSettingsService<ReactionRoleSettings> reactionRoleSettingsService)
         {
             _streamAnnouncerSettingsService = streamAnnouncerSettingsService;
             _streamerRoleSettingsService = streamerRoleSettingsService;
@@ -44,6 +46,7 @@ namespace Volvox.Helios.Web.Controllers
             _chatTrackerSettingsService = chatTrackerSettingsService;
             _reminderSettingsService = reminderSettingsService;
             _recurringReminderService = recurringReminderService;
+            _reactionRoleSettingsService = reactionRoleSettingsService;
         }
 
         public IActionResult Index(ulong guildId, [FromServices] IBot bot,
@@ -285,6 +288,42 @@ namespace Volvox.Helios.Web.Controllers
                 Enabled = reminderSettings.Enabled,
                 GuildId = guildId
             });
+
+            return RedirectToAction("Index");
+        }
+        #endregion
+
+        #region Reaction Role
+        [HttpGet("ReactionRole")]
+        public async Task<IActionResult> ReactionRoleSettings(ulong guildId)
+        {
+            var settings = await _reactionRoleSettingsService.GetSettingsByGuild(guildId);
+            if(settings is null)
+            {
+                settings = new ReactionRoleSettings
+                {
+                    Enabled = false,
+                    GuildId = guildId
+                };
+
+                await _reactionRoleSettingsService.SaveSettings(settings);
+            }
+
+            var vm = new ReactionRoleSettingsViewModel
+            {
+                Enabled = settings.Enabled,
+                GuildId = guildId
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost("ReactionRole")]
+        public async Task<IActionResult> ReactionRoleSettings(ulong guildId, ReactionRoleSettingsViewModel vm)
+        {
+            var settings = await _reactionRoleSettingsService.GetSettingsByGuild(guildId);
+            settings.Enabled = vm.Enabled;
+            await _reactionRoleSettingsService.SaveSettings(settings);
 
             return RedirectToAction("Index");
         }

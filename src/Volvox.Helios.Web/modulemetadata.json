@@ -41,6 +41,13 @@
       "Description": "Set periodic reminders that will be sent to specific channels.",
       "ReleaseState": "Canary",
       "Configurable": "true"
+    },
+    "ReactionRoleModule": {
+      "Name": "Reaction Role",
+      "Version": "1.0",
+      "Description": "Have the bot post a message that has a list of reaction that users can click to auto-assign roles to themselves.",
+      "ReleaseState": "Canary",
+      "Configurable": "true"
     }
   }
 }

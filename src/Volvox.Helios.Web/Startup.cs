@@ -40,6 +40,7 @@ using Hangfire.SqlServer;
 using Volvox.Helios.Core.Modules.ReminderModule;
 using Volvox.Helios.Service.BackgroundJobs;
 using Volvox.Helios.Service.Jobs;
+using Volvox.Helios.Core.Modules.ReactionRole;
 
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
@@ -121,6 +122,7 @@ namespace Volvox.Helios.Web
             services.AddSingleton<IModule, StreamerRoleModule>();
             services.AddSingleton<IModule, ChatTrackerModule>();
             services.AddSingleton<IModule, RemembotModule>();
+            services.AddSingleton<IModule, ReactionRoleModule>();
 
             // Commands
             services.AddSingleton<IModule, CommandManager>();
